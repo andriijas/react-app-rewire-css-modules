@@ -40,7 +40,12 @@ module.exports = function override(config, env) {
     // with override localIdentName
     // config = rewireLess.withLoaderOptions(
     //   `${env === "production" ? "foobar" : "[local]"}-[hash:base64:8]`,
-    //)(config, env);
+    // )(config, env);
+    // with include and exclude
+    // config = rewireLess.withLoaderOptions(
+    //   new RegExp(`${path.sep}src${path.sep}`),
+    //   new RegExp(`${path.sep}node_modules${path.sep}`),
+    // )(config, env);
     // ...
     return config;
 }

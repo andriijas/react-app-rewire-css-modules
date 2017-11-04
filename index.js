@@ -47,22 +47,20 @@ const addBeforeRule = (rulesSource, ruleMatcher, value) => {
 
 function createRewireLess(
   localIdentName = `[local]___[hash:base64:5]`,
-  lessLoaderOptions = {}
+  lessLoaderOptions = {},
+  include = new RegExp(`${path.sep}src${path.sep}components${path.sep}`),
+  exclude = new RegExp(`${path.sep}node_modules${path.sep}`),
 ) {
   return function(config, env) {
     const cssRule = findRule(config.module.rules, cssRuleMatcher);
-    cssRule.exclude = new RegExp(
-      `${path.sep}src${path.sep}components${path.sep}`
-    );
+    cssRule.exclude = include;
 
     const lessRule = cloneDeep(cssRule);
     lessRule.test = /\.less$/;
     const cssModulesRule = cloneDeep(cssRule);
 
-    cssModulesRule.include = new RegExp(
-      `${path.sep}src${path.sep}components${path.sep}`
-    );
-    cssModulesRule.exclude = new RegExp(`${path.sep}node_modules${path.sep}`);
+    cssModulesRule.include = include;
+    cssModulesRule.exclude = exclude;
 
     const cssModulesRuleCssLoader = findRule(cssModulesRule, cssLoaderMatcher);
     cssModulesRuleCssLoader.options = Object.assign(
