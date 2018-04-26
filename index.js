@@ -49,7 +49,10 @@ function createRewireLess(lessLoaderOptions = {}) {
       // Get a copy of the CSS module loader
       getLoader(
         config.module.rules,
-        rule => String(rule.test) === String(/\.module\.css$/),
+        rule =>
+          String(rule.test) === String(/\.module\.css$/) ||
+          (String(rule.test) === String(/\.css$/) &&
+            String(rule.exclude) !== String(/\.module\.css$/)),
       ),
     );
 
