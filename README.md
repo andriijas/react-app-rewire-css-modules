@@ -2,10 +2,11 @@
 
 Add Less and Less module support to
 [create-react-app](https://github.com/facebookincubator/create-react-app) 2.0 via
-[react-app-rewired](https://github.com/timarney/react-app-rewired).
+[react-app-rewired](https://github.com/timarney/react-app-rewired) 2.0 .
 
 `Create react app 2.0` already supports CSS modules. This extension adds support for regular less files and *.module.less files.
 
+`React app rewired 2.0` removes the rewire helper functions
 ## Installation
 
 ```
