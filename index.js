@@ -1,10 +1,29 @@
 const path = require("path");
-const { getLoader, loaderNameMatches } = require("react-app-rewired");
+
+const loaderNameMatches = function (rule, loader_name) {
+  return rule && rule.loader && typeof rule.loader === 'string' &&
+    (rule.loader.indexOf(`${path.sep}${loader_name}${path.sep}`) !== -1 ||
+      rule.loader.indexOf(`@${loader_name}${path.sep}`) !== -1);
+};
+
+const getLoader = function (rules, matcher) {
+  let loader;
+
+  rules.some(rule => {
+    return (loader = matcher(rule)
+      ? rule
+      : getLoader(rule.use || rule.oneOf || (Array.isArray(rule.loader) && rule.loader) || [], matcher));
+  });
+
+  return loader;
+};
 
 const lessExtension = /\.less$/;
 const lessModuleExtension = /\.module.less$/;
 
 function createRewireLess(lessLoaderOptions = {}) {
+  // Set javascriptEnabled default value to true
+  lessLoaderOptions = Object.assign({ javascriptEnabled: true}, lessLoaderOptions);
   return function(config, env) {
     // Exclude all less files (including module files) from file-loader
     const fileLoader = getLoader(config.module.rules, rule => {
@@ -17,7 +36,7 @@ function createRewireLess(lessLoaderOptions = {}) {
         return {
           ...rule,
           loader: [
-            ...cssRules.loader,
+            ...(cssRules.loader || cssRules.use),
             { loader: "less-loader", options: lessLoaderOptions },
           ],
         };
